@@ -61,6 +61,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
         return pinylib.CONFIG.CONFIG_PATH + self.room_name + '/'
 
     def db_setup(self):
+        self.do_verbose(0)
         self.buddy_db = botdb.DataBase('users', self.config_path)
         if not self.buddy_db.has_db_file():
             self.buddy_db.create_db_path()
@@ -1394,7 +1395,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
     def do_verbose(self, s):
         """ Toggles verbose Mode """
-        pinylib.CONFIG.B_VERBOSE = not pinylib.CONFIG.B_VERBOSE
+        pinylib.CONFIG.B_VERBOSE = False
         if not s:
             self.handle_msg('Verbose: %s' % pinylib.CONFIG.B_VERBOSE)
 
