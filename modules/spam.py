@@ -176,7 +176,7 @@ class Spam:
         ban = False
         kick = False
 
-        urls = re.findall('https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', msg)
+        urls = re.findall('lsjfpaldjflkdncladscdkjfdkfajdsakfj', msg)
 
         msg = words.removenonascii(msg)
         chat_words = msg.split(' ')
