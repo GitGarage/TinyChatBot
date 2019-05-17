@@ -8,7 +8,6 @@ import re
 import pinylib
 from util import words
 
-
 class Spam:
 
     def __init__(self, tinybot, conf):
@@ -26,6 +25,14 @@ class Spam:
         self.config = conf
         self.general = ["hey", "hi", "yes", "no", "yo", "sup", "hello", "cheers", "tokes"]
         self.msgs = {}
+
+        self.recent_users = []
+        self.recent_messages = []
+        self.current_message = 0
+        for my_index in range(5):
+          this_item = ['array%i' % my_index]
+          self.recent_users.append(this_item)
+          self.recent_messages.append(this_item)
 
         self.joind_time = 0
         self.joind_count = 0
@@ -172,21 +179,22 @@ class Spam:
 
     def check_msg(self, msg):
 
+        cleanse = False
+        original_message = msg
         spammer = False
         ban = False
         kick = False
 
-        urls = re.findall('musikkorps', msg)
-        urls.extend(re.findall('musikorps', msg))
-        urls.extend(re.findall('musicorps', msg))
-        urls.extend(re.findall('mussikorps', msg))
-        urls.extend(re.findall('musicorps', msg))
-        urls.extend(re.findall('muusikorps', msg))
-        urls.extend(re.findall('mussicorps', msg))
-        urls.extend(re.findall('musikorpps', msg))
-        urls.extend(re.findall('illien', msg))
-        urls.extend(re.findall('musikorps', msg))
-        urls.extend(re.findall('dreil', msg))
+        nazi = bool(re.search(r"musikkorps|musikorps|musicorps|mussikorps|musicorps|muusikorps|mussicorps|musikorpps|illien|musikorps|dreil", msg, re.IGNORECASE))
+
+        if nazi:
+            spammer = True
+            ban = True
+
+        if len(msg.splitlines()) > 5:
+            spammer = True
+            ban = True
+            cleanse = True
 
         msg = words.removenonascii(msg)
         chat_words = msg.split(' ')
@@ -200,15 +208,6 @@ class Spam:
         # each word reviewed and scored
 
         spamlevel = 0.1 # no such thing as no spam
-
-        if len(msg.splitlines() > 5):
-            kick = True
-            spamlevel = 1.5
-
-        if self.config.B_SPAMP:
-            if urls:   # if url is passed in the public
-                kick = True
-                spamlevel = 1.5
 
         if len(msg) > 120:
             spamlevel = 2.0  # body of message is longer than 120 characters
@@ -278,6 +277,18 @@ class Spam:
 
             if spamlevel > 3.2:
                 ban = True
+
+        if not ban:
+            if not kick:
+                if not spammer:
+                    self.recent_messages[self.current_message % 5] = original_message
+                    self.recent_users[self.current_message % 5] = chatr_user
+                    self.current_message += 1
+
+        if cleanse:
+            for message_index in range(5):
+                this_message = (current_message + message_index) % 5
+                self.tinybot.handle_msg('\n %s: %s' % (self.recent_users[this_message], self.recent_messages[this_message]))
 
         if ban:
             time.sleep(0.7)
