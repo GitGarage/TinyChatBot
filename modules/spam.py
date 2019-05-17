@@ -180,7 +180,6 @@ class Spam:
     def check_msg(self, msg):
 
         cleanse = False
-        original_message = msg
         spammer = False
         ban = False
         kick = False
@@ -193,10 +192,10 @@ class Spam:
 
         if len(msg.splitlines()) > 5:
             spammer = True
-            if self.tinybot.active_user.user_level > 3:
-                kick = True
-            else:
+            if self.tinybot.active_user.user_level > 5:
                 ban = True
+            elif self.tinybot.active_user.user_level > 3:
+                kick = True
             cleanse = True
 
         msg = words.removenonascii(msg)
@@ -213,13 +212,9 @@ class Spam:
         spamlevel = 0.1 # no such thing as no spam
 
         if len(msg) > 250:
-            spamlevel = 2.0  # body of message is longer than 120 characters
             if self.tinybot.active_user.user_level > 5:
                 spammer = True
-                if self.tinybot.active_user.user_level > 3:
-                    kick = True
-                else:
-                    ban = True
+                ban = True
                 cleanse = True
 
         for word in chat_words:
@@ -291,7 +286,7 @@ class Spam:
         if not ban:
             if not kick:
                 if not spammer:
-                    self.recent_messages[self.current_message % 5] = original_message
+                    self.recent_messages[self.current_message % 5] = msg
                     self.recent_users[self.current_message % 5] = chatr_user
                     self.current_message += 1
 
@@ -300,7 +295,7 @@ class Spam:
         if cleanse:
             postext += '\n\nLast 5 messages:'
             if self.current_message < 5:
-                for this_message in range(self.current_message):
+                for this_message in range(self.current_message + 1):
                     postext += '\n\n%s: %s' % (self.recent_users[this_message], self.recent_messages[this_message])
             else:
                 for message_index in range(5):
@@ -319,8 +314,9 @@ class Spam:
                 else:
                     self.tinybot.send_ban_msg(self.tinybot.active_user.id)
 
-                postext = '\n %s %s was banned for spamming.' % (self.tinybot.boticon, self.tinybot.active_user.nick) + postext
-                while len(postext) > 500:
+                postext = '%s %s was banned for spamming.' % (self.tinybot.boticon, self.tinybot.active_user.nick) + postext
+                while len(postext) > 0:
+                    self.tinybot.console_write(pinylib.COLOR['red'], 'in loop')
                     send_part = ''
                     all_words = postext.split()
                     while all_words and len(send_part + all_words[0]) + 1 < 500:
@@ -330,8 +326,8 @@ class Spam:
                         postext = ' '.join(all_words)
                     else:
                         postext = ''
+                    self.tinybot.console_write(pinylib.COLOR['red'], 'end with:' + postext)
 
-                self.tinybot.handle_msg(postext)
                 spamlevel = 10
 
         if kick:
@@ -341,8 +337,11 @@ class Spam:
                 else:
                     self.tinybot.send_kick_msg(self.tinybot.active_user.id)
 
-                postext = '\n %s %s was kicked for spamming.' % (self.tinybot.boticon, self.tinybot.active_user.nick) + postext
-                while len(postext) > 500:
+                self.tinybot.console_write(pinylib.COLOR['red'], 'postext:' + postext)
+                postext = '%s %s was kicked for spamming.' % (self.tinybot.boticon, self.tinybot.active_user.nick) + postext
+                self.tinybot.console_write(pinylib.COLOR['red'], 'postpostex:' + postext)
+                while len(postext) > 0:
+                    self.tinybot.console_write(pinylib.COLOR['red'], 'in loop')
                     send_part = ''
                     all_words = postext.split()
                     while all_words and len(send_part + all_words[0]) + 1 < 500:
@@ -352,8 +351,7 @@ class Spam:
                         postext = ' '.join(all_words)
                     else:
                         postext = ''
-
-                self.tinybot.handle_msg(postext)
+                    self.tinybot.console_write(pinylib.COLOR['red'], 'end with:' + postext)
 
                 spamlevel = 10
 
