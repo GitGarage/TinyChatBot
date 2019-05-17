@@ -30,9 +30,9 @@ class Spam:
         self.recent_messages = []
         self.current_message = 0
         for my_index in range(5):
-          this_item = ['array%i' % my_index]
-          self.recent_users.append(this_item)
-          self.recent_messages.append(this_item)
+            this_item = ['array%i' % my_index]
+            self.recent_users.append(this_item)
+            self.recent_messages.append(this_item)
 
         self.joind_time = 0
         self.joind_count = 0
