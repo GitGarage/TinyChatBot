@@ -278,22 +278,6 @@ class Spam:
             if spamlevel > 3.2:
                 ban = True
 
-        if not ban:
-            if not kick:
-                if not spammer:
-                    self.recent_messages[self.current_message % 5] = original_message
-                    self.recent_users[self.current_message % 5] = chatr_user
-                    self.current_message += 1
-
-        if cleanse:
-            message_history = ''
-            for message_index in range(5):
-                this_message = (self.current_message + message_index) % 5
-                message_history += '%s: %s' % (self.recent_users[this_message], self.recent_messages[this_message])
-                if message_index < 4:
-                    message_history += '\n'
-            self.tinybot.handle_msg(message_history)
-
         if ban:
             time.sleep(0.7)
 
@@ -322,5 +306,21 @@ class Spam:
                     self.tinybot.handle_msg(
                         '\n %s %s was kicked for spamming.' % (self.tinybot.boticon, self.tinybot.active_user.nick))
                 spamlevel = 10
+
+        if not ban:
+            if not kick:
+                if not spammer:
+                    self.recent_messages[self.current_message % 5] = original_message
+                    self.recent_users[self.current_message % 5] = chatr_user
+                    self.current_message += 1
+
+        if cleanse:
+            message_history = ''
+            for message_index in range(5):
+                this_message = (self.current_message + message_index) % 5
+                message_history += '%s: %s' % (self.recent_users[this_message], self.recent_messages[this_message])
+                if message_index < 4:
+                    message_history += '\n'
+            self.tinybot.handle_msg(message_history)
 
         return spamlevel
