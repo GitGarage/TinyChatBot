@@ -121,6 +121,10 @@ pinylib-rtc requires 4 libraries that are not part of the standard python librar
 
 These can all be installed form a command prompt with pip.
 
+`sudo apt update`
+
+`sudo apt install python-pip python2.7 -y`
+
 `pip install websocket-client requests colorama beautifulsoup4 simplejson`
 
 

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Buddybot by odsum (https://github.com/odsum)
 Based off Tinybot by Nortxort (https://github.com/nortxort/tinybot-rtc)
@@ -833,6 +833,17 @@ class TinychatBot(pinylib.TinychatRTCClient):
         :param search_str: The search term.
         :type search_str: str
         """
+        if "youtube.com" in search_str:
+            if "?v=" in search_str:
+                search_str = search_str.split('&')[0]
+            else:
+                search_str = search_str.split('?')[0]
+        elif "youtu.be" in search_str:
+            if "?v=" in search_str:
+                search_str = search_str.split('&')[0]
+            else:
+                search_str = search_str.split('?')[0]        
+
         log.info('user: %s:%s is searching youtube: %s' %
                  (self.active_user.nick, self.active_user.id, search_str))
         if self.is_client_mod:
