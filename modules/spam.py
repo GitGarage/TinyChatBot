@@ -193,7 +193,10 @@ class Spam:
 
         if len(msg.splitlines()) > 5:
             spammer = True
-            ban = True
+            if self.tinybot.active_user.user_level > 3:
+                kick = True
+            else:
+                ban = True
             cleanse = True
 
         msg = words.removenonascii(msg)
@@ -209,8 +212,15 @@ class Spam:
 
         spamlevel = 0.1 # no such thing as no spam
 
-        if len(msg) > 120:
+        if len(msg) > 250:
             spamlevel = 2.0  # body of message is longer than 120 characters
+            if self.tinybot.active_user.user_level > 5:
+                spammer = True
+                if self.tinybot.active_user.user_level > 3:
+                    kick = True
+                else:
+                    ban = True
+                cleanse = True
 
         for word in chat_words:
             if word in self.general:
@@ -278,6 +288,25 @@ class Spam:
             if spamlevel > 3.2:
                 ban = True
 
+        if not ban:
+            if not kick:
+                if not spammer:
+                    self.recent_messages[self.current_message % 5] = original_message
+                    self.recent_users[self.current_message % 5] = chatr_user
+                    self.current_message += 1
+
+        postext = ''
+
+        if cleanse:
+            postext += '\n\nLast 5 messages:'
+            if self.current_message < 5:
+                for this_message in range(self.current_message):
+                    postext += '\n\n%s: %s' % (self.recent_users[this_message], self.recent_messages[this_message])
+            else:
+                for message_index in range(5):
+                    this_message = (self.current_message + message_index) % 5
+                    postext += '\n\n%s: %s' % (self.recent_users[this_message], self.recent_messages[this_message])
+
         if ban:
             time.sleep(0.7)
 
@@ -290,9 +319,19 @@ class Spam:
                 else:
                     self.tinybot.send_ban_msg(self.tinybot.active_user.id)
 
-                if self.config.B_VERBOSE:
-                    self.tinybot.handle_msg(
-                        '\n %s %s was banned for spamming.' % (self.tinybot.boticon, self.tinybot.active_user.nick))
+                postext = '\n %s %s was banned for spamming.' % (self.tinybot.boticon, self.tinybot.active_user.nick) + postext
+                while len(postext) > 500:
+                    send_part = ''
+                    all_words = postext.split()
+                    while all_words and len(send_part + all_words[0]) + 1 < 500:
+                        send_part += all_words.pop(0) + ' '
+                    self.tinybot.handle_msg(send_part)
+                    if all_words:
+                        postext = ' '.join(all_words)
+                    else:
+                        postext = ''
+
+                self.tinybot.handle_msg(postext)
                 spamlevel = 10
 
         if kick:
@@ -302,25 +341,20 @@ class Spam:
                 else:
                     self.tinybot.send_kick_msg(self.tinybot.active_user.id)
 
-                if self.config.B_VERBOSE:
-                    self.tinybot.handle_msg(
-                        '\n %s %s was kicked for spamming.' % (self.tinybot.boticon, self.tinybot.active_user.nick))
+                postext = '\n %s %s was kicked for spamming.' % (self.tinybot.boticon, self.tinybot.active_user.nick) + postext
+                while len(postext) > 500:
+                    send_part = ''
+                    all_words = postext.split()
+                    while all_words and len(send_part + all_words[0]) + 1 < 500:
+                        send_part += all_words.pop(0) + ' '
+                    self.tinybot.handle_msg(send_part)
+                    if all_words:
+                        postext = ' '.join(all_words)
+                    else:
+                        postext = ''
+
+                self.tinybot.handle_msg(postext)
+
                 spamlevel = 10
-
-        if not ban:
-            if not kick:
-                if not spammer:
-                    self.recent_messages[self.current_message % 5] = original_message
-                    self.recent_users[self.current_message % 5] = chatr_user
-                    self.current_message += 1
-
-        if cleanse:
-            message_history = ''
-            for message_index in range(5):
-                this_message = (self.current_message + message_index) % 5
-                message_history += '%s: %s' % (self.recent_users[this_message], self.recent_messages[this_message])
-                if message_index < 4:
-                    message_history += '\n'
-            self.tinybot.handle_msg(message_history)
 
         return spamlevel
