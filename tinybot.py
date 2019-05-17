@@ -1529,12 +1529,12 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
     def on_quit(self, uid):
 
-        if pinylib.CONFIG.B_VERBOSE:
-            if self.score < 2:
-                _user = self.users.search(uid)
-                msg = unicode("𝘭𝘦𝘧𝘵 𝘵𝘩𝘦 𝘳𝘰𝘰𝘮", 'utf-8')
-                if _user is not None:
-                    self.handle_msg('\n %s %s %s' % (self.boticon, _user.nick, msg))
+#        if pinylib.CONFIG.B_VERBOSE:
+#            if self.score < 2:
+#                _user = self.users.search(uid)
+#                msg = unicode("𝘭𝘦𝘧𝘵 𝘵𝘩𝘦 𝘳𝘰𝘰𝘮", 'utf-8')
+#                if _user is not None:
+#                    self.handle_msg('\n %s %s %s' % (self.boticon, _user.nick, msg))
 
         if uid in self.kick_pool:
             self.kick_pool.remove(uid)
