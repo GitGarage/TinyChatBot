@@ -61,7 +61,6 @@ class TinychatBot(pinylib.TinychatRTCClient):
         return pinylib.CONFIG.CONFIG_PATH + self.room_name + '/'
 
     def db_setup(self):
-        self.do_verbose(0)
         self.buddy_db = botdb.DataBase('users', self.config_path)
         if not self.buddy_db.has_db_file():
             self.buddy_db.create_db_path()
