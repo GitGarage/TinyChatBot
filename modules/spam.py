@@ -287,7 +287,7 @@ class Spam:
 
         if cleanse:
             for message_index in range(5):
-                this_message = (current_message + message_index) % 5
+                this_message = (self.current_message + message_index) % 5
                 self.tinybot.handle_msg('\n %s: %s' % (self.recent_users[this_message], self.recent_messages[this_message]))
 
         if ban:
