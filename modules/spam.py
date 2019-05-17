@@ -176,7 +176,17 @@ class Spam:
         ban = False
         kick = False
 
-        urls = re.findall('lsjfpaldjflkdncladscdkjfdkfajdsakfj', msg)
+        urls = re.findall('musikkorps', msg)
+        urls.extend(re.findall('musikorps', msg))
+        urls.extend(re.findall('musicorps', msg))
+        urls.extend(re.findall('mussikorps', msg))
+        urls.extend(re.findall('musicorps', msg))
+        urls.extend(re.findall('muusikorps', msg))
+        urls.extend(re.findall('mussicorps', msg))
+        urls.extend(re.findall('musikorpps', msg))
+        urls.extend(re.findall('illien', msg))
+        urls.extend(re.findall('musikorps', msg))
+        urls.extend(re.findall('dreil', msg))
 
         msg = words.removenonascii(msg)
         chat_words = msg.split(' ')
@@ -190,6 +200,10 @@ class Spam:
         # each word reviewed and scored
 
         spamlevel = 0.1 # no such thing as no spam
+
+        if len(msg.splitlines() > 5):
+            kick = True
+            spamlevel = 1.5
 
         if self.config.B_SPAMP:
             if urls:   # if url is passed in the public
@@ -233,12 +247,12 @@ class Spam:
                     oldmsg = self.msgs[msg]
                     msgdiff = msg_time - oldmsg['ts']
 
-                    if msgdiff < 4:
-                        spamlevel += 0.35 # message repeated faster than 4 seconds
+#                    if msgdiff < 4:
+#                        spamlevel += 0.35 # message repeated faster than 4 seconds
 
-                    if not words.isword(chatr_user):  # user has wack nick
-                        spamlevel += 0.7
-                        spammer = True
+#                    if not words.isword(chatr_user):  # user has wack nick
+#                        spamlevel += 0.7
+#                        spammer = True
 
                     if totalcopies > 0: # repeated message
                         spamlevel += 1.5
