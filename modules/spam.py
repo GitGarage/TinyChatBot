@@ -318,7 +318,7 @@ class Spam:
                 while len(postext) > 0:
                     self.tinybot.console_write(pinylib.COLOR['red'], 'in loop')
                     send_part = ''
-                    all_words = postext.split()
+                    all_words = postext.split(' ')
                     while all_words and len(send_part + all_words[0]) + 1 < 500:
                         send_part += all_words.pop(0) + ' '
                     self.tinybot.handle_msg(send_part)
@@ -343,7 +343,7 @@ class Spam:
                 while len(postext) > 0:
                     self.tinybot.console_write(pinylib.COLOR['red'], 'in loop')
                     send_part = ''
-                    all_words = postext.split()
+                    all_words = postext.split(' ')
                     while all_words and len(send_part + all_words[0]) + 1 < 500:
                         send_part += all_words.pop(0) + ' '
                     self.tinybot.handle_msg(send_part)
