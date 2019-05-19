@@ -462,7 +462,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
         if _user is not None:
 
             if _user.user_level == 8 or _user.nick in self.cambans:
-                self.handle_msg('%s is banned from camming up.' % _user.nick)
+#                self.handle_msg('%s is banned from camming up.' % _user.nick)
                 self.score = 10
                 self.send_kick_msg(_user.id)
                 return
@@ -472,7 +472,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
                 _user.is_broadcasting = True
             else:
                 _user.is_waiting = True
-                self.send_chat_msg('%s is waiting in the greenroom.' % _user.nick)
+#                self.send_chat_msg('%s is waiting in the greenroom.' % _user.nick)
 
     # == Bot Cmd Handler ==
 

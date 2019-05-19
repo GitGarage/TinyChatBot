@@ -625,10 +625,10 @@ class TinychatRTCClient(object):
         :param playlist_data: The data of the items in the playlist.
         :type playlist_data: dict
         """
-        if not playlist_data['success']:
-            self.console_write(COLOR['red'], playlist_data['reason'])
-        else:
-            print (playlist_data)
+#        if not playlist_data['success']:
+#            self.console_write(COLOR['red'], playlist_data['reason'])
+#        else:
+#            print (playlist_data)
 
     def on_yut_play(self, yt_data):
         """
@@ -641,20 +641,20 @@ class TinychatRTCClient(object):
         starting/searching the youtube, the youtube ID, youtube time and so on.
         :type yt_data: dict
         """
-        user_nick = 'n/a'
-        if 'handle' in yt_data:
-            if yt_data['handle'] != self.client_id:
-                _user = self.users.search(yt_data['handle'])
-                user_nick = _user.nick
+ #       user_nick = 'n/a'
+ #       if 'handle' in yt_data:
+ #           if yt_data['handle'] != self.client_id:
+ #               _user = self.users.search(yt_data['handle'])
+ #               user_nick = _user.nick
 
-        if yt_data['item']['offset'] == 0:
+ #       if yt_data['item']['offset'] == 0:
             # the video was started from the start.
-            self.console_write(COLOR['bright_magenta'], '%s started youtube video (%s)' %
-                               (user_nick, yt_data['item']['id']))
-        elif yt_data['item']['offset'] > 0:
+ #           self.console_write(COLOR['bright_magenta'], '%s started youtube video (%s)' %
+#                               (user_nick, yt_data['item']['id']))
+ #       elif yt_data['item']['offset'] > 0:
             # the video was searched while still playing.
-            self.console_write(COLOR['bright_magenta'], '%s searched the youtube video to: %s' %
-                               (user_nick, int(round(yt_data['item']['offset']))))
+ #           self.console_write(COLOR['bright_magenta'], '%s searched the youtube video to: %s' %
+ #                              (user_nick, int(round(yt_data['item']['offset']))))
 
     def on_yut_pause(self, yt_data):
         """
@@ -667,14 +667,14 @@ class TinychatRTCClient(object):
         pausing/searching the youtube, the youtube ID, youtube time and so on.
         :type yt_data: dict
         """
-        user_nick = 'n/a'
-        if 'handle' in yt_data:
-            if yt_data['handle'] != self.client_id:
-                _user = self.users.search(yt_data['handle'])
-                user_nick = _user.nick
+ #       user_nick = 'n/a'
+ #       if 'handle' in yt_data:
+ #           if yt_data['handle'] != self.client_id:
+ #               _user = self.users.search(yt_data['handle'])
+ #               user_nick = _user.nick
 
-        self.console_write(COLOR['bright_magenta'], '%s paused the video at %s' %
-                           (user_nick, int(round(yt_data['item']['offset']))))
+ #       self.console_write(COLOR['bright_magenta'], '%s paused the video at %s' %
+ #                          (user_nick, int(round(yt_data['item']['offset']))))
 
     def on_yut_stop(self, yt_data):
         """
@@ -683,7 +683,7 @@ class TinychatRTCClient(object):
         :param yt_data: The event information contains the ID of the video, the time and so on.
         :type yt_data: dict
         """
-        self.console_write(COLOR['bright_magenta'], 'The youtube (%s) was stopped.' % yt_data['item']['id'])
+ #       self.console_write(COLOR['bright_magenta'], 'The youtube (%s) was stopped.' % yt_data['item']['id'])
 
     # Message Construction.
     def send_join_msg(self):

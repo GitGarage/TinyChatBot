@@ -190,12 +190,9 @@ class Spam:
             spammer = True
             ban = True
 
-        if len(msg.splitlines()) > 5:
+        if len(msg.splitlines()) > 8:
             spammer = True
-            if self.tinybot.active_user.user_level > 5:
-                ban = True
-            elif self.tinybot.active_user.user_level > 3:
-                kick = True
+            ban = True
             cleanse = True
 
         msg = words.removenonascii(msg)
@@ -212,7 +209,7 @@ class Spam:
         spamlevel = 0.1 # no such thing as no spam
 
         if len(msg) > 250:
-            if self.tinybot.active_user.user_level > 5:
+            if self.tinybot.active_user.user_level > 3:
                 spammer = True
                 ban = True
                 cleanse = True
@@ -251,12 +248,12 @@ class Spam:
                     oldmsg = self.msgs[msg]
                     msgdiff = msg_time - oldmsg['ts']
 
-#                    if msgdiff < 4:
-#                        spamlevel += 0.35 # message repeated faster than 4 seconds
+                    if msgdiff < 4:
+                        spamlevel += 0.35 # message repeated faster than 4 seconds
 
-#                    if not words.isword(chatr_user):  # user has wack nick
-#                        spamlevel += 0.7
-#                        spammer = True
+                    if chatr_user is 'FAGBOS':  # user has wack nick
+                        ban = True
+                        spammer = True
 
                     if totalcopies > 0: # repeated message
                         spamlevel += 1.5
@@ -305,7 +302,7 @@ class Spam:
         if ban:
             time.sleep(0.7)
 
-            if self.tinybot.active_user.user_level > 5:
+            if self.tinybot.active_user.user_level > 3:
                 if spammer and self.tinybot.active_user.user_level == 6:
                     self.tinybot.buddy_db.add_bad_account(self.tinybot.active_user.account)
 
