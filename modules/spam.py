@@ -304,12 +304,13 @@ class Spam:
                 ban = True
 
         if not ban:
-            if not spammer:
-                this_message = self.current_message % 5
-                self.recent_messages[this_message] = msg
-                self.recent_users[this_message] = chatr_user
-                self.recent_times[this_message] = msg_time
-                self.current_message += 1
+            if not kick:
+                if not spammer:
+                    this_message = self.current_message % 5
+                    self.recent_messages[this_message] = msg
+                    self.recent_users[this_message] = chatr_user
+                    self.recent_times[this_message] = msg_time
+                    self.current_message += 1
 
         postext = ''
 
