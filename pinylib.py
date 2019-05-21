@@ -480,8 +480,8 @@ class TinychatRTCClient(object):
             # since spam could be an issue, only allow
             # one message per second to be passed on to
             # the message handler.
-            if ts - self.active_user.msg_time >= 1:
-                self.message_handler(msg)
+            #if ts - self.active_user.msg_time >= 1:
+            self.message_handler(msg)
             self.active_user.msg_time = ts
 
     def message_handler(self, msg):

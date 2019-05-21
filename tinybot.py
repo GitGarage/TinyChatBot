@@ -1485,10 +1485,10 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
     def handle_msg(self, msg):
         time.sleep(0.6)
-        if pinylib.CONFIG.B_VERBOSE:
-            self.send_chat_msg(msg)
-        else:
-            self.send_private_msg(self.active_user.id, msg)
+#        if pinylib.CONFIG.B_VERBOSE:
+        self.send_chat_msg(msg)
+#        else:
+#            self.send_private_msg(self.active_user.id, msg)
 
     def worker_kicks(self):
         limit = 0
