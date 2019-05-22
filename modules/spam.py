@@ -182,7 +182,7 @@ class Spam:
     def check_msg(self, msg):
 
         spammer = False
-        history = True if msg.startswith('!mr uptime') or msg.startswith('!clear') else False
+        history = True if msg.startswith('!uptime') or msg.startswith('!clear') else False
         cleanse = False
         ban = False
         kick = False
@@ -320,7 +320,7 @@ class Spam:
         postext = ''
 
         if self.history:
-            postext += 'Last %s message%s:' % (str(self.current_message), ('' if self.current_message == 1 else 's'))
+            postext += 'Last %s message%s:' % (str(self.current_message if self.current_message < 5 else 5), ('' if self.current_message == 1 else 's'))
             if self.current_message < 5:
                 for this_message in range(self.current_message):
                     postext += '\n\n%s: %s' % (self.recent_users[this_message], self.recent_messages[this_message])
