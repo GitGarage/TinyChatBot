@@ -807,7 +807,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
         """
         prefix = pinylib.CONFIG.B_PREFIX
 
-        if msg.startswith('!mr uptime'):
+        if msg.startswith('!uptime'):
             difference = str(datetime.datetime.now() - self.t1)
             self.handle_msg('Current uptime: \n%s' % difference)
         elif msg.startswith('!clear') and self.active_user.account in ['slicksoul', 'omikes', 'csucieveryday']:

@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5eff5f67-9c20-45bb-b167-b7c04f0236b0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/modules/spam.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/spam.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tinybot.py" beforeDir="false" afterPath="$PROJECT_DIR$/tinybot.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -41,20 +40,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/spam.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="341" column="58" selection-start-line="341" selection-start-column="58" selection-end-line="341" selection-end-column="58" />
+            <state relative-caret-position="328">
+              <caret line="326" column="17" lean-forward="true" selection-start-line="326" selection-start-column="17" selection-end-line="326" selection-end-column="17" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tinybot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="812" column="37" lean-forward="true" selection-start-line="812" selection-start-column="13" selection-end-line="812" selection-end-column="37" />
+            <state relative-caret-position="134">
+              <caret line="809" column="28" selection-start-line="809" selection-start-column="28" selection-end-line="809" selection-end-column="28" />
               <folding>
                 <element signature="e#150#164#0" expanded="true" />
               </folding>
@@ -129,8 +128,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/config.py" />
-        <option value="$PROJECT_DIR$/tinybot.py" />
         <option value="$PROJECT_DIR$/modules/spam.py" />
+        <option value="$PROJECT_DIR$/tinybot.py" />
       </list>
     </option>
   </component>
@@ -262,12 +261,12 @@
       <option name="presentableId" value="Default" />
       <updated>1558540354514</updated>
       <workItem from="1558540367445" duration="827000" />
-      <workItem from="1558541539199" duration="19988000" />
+      <workItem from="1558541539199" duration="20715000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20815000" />
+    <option name="totallyTimeSpent" value="21542000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="954" extended-state="6" />
@@ -350,20 +349,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tinybot.py">
+    <entry file="file://$PROJECT_DIR$/modules/spam.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="812" column="37" lean-forward="true" selection-start-line="812" selection-start-column="13" selection-end-line="812" selection-end-column="37" />
-          <folding>
-            <element signature="e#150#164#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="328">
+          <caret line="326" column="17" lean-forward="true" selection-start-line="326" selection-start-column="17" selection-end-line="326" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/spam.py">
+    <entry file="file://$PROJECT_DIR$/tinybot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="341" column="58" selection-start-line="341" selection-start-column="58" selection-end-line="341" selection-end-column="58" />
+        <state relative-caret-position="134">
+          <caret line="809" column="28" selection-start-line="809" selection-start-column="28" selection-end-line="809" selection-end-column="28" />
+          <folding>
+            <element signature="e#150#164#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
