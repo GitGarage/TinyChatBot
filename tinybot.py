@@ -6,6 +6,7 @@ Based off Tinybot by Nortxort (https://github.com/nortxort/tinybot-rtc)
 
 import logging
 import threading
+import datetime
 import time
 
 import pinylib
@@ -54,6 +55,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
     worker_bans_working = False
 
     tmp_announcement = None
+    t1 = datetime.datetime.now()
 
     @property
     def config_path(self):
@@ -798,6 +800,10 @@ class TinychatBot(pinylib.TinychatRTCClient):
         :type msg: str
         """
         prefix = pinylib.CONFIG.B_PREFIX
+
+        if msg.startswith('!mr uptime'):
+            difference = str(datetime.datetime.now() - t1)
+            self.handle_msg('Current uptime: %s' % difference)
 
         if msg.startswith(prefix):
             self.cmd_handler(msg)
