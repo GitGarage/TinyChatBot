@@ -220,7 +220,6 @@ class Spam:
                     else:
                         first_time = self.recent_times[this_message]
                         break
-            self.tinybot.console_write(pinylib.COLOR['red'], 'spammer:' + str(msg_time - first_time))
             if (msg_time - first_time) < 3:
                 spammer = True
                 ban = True
@@ -346,7 +345,7 @@ class Spam:
                     else:
                         break
 
-                spamlevel = 10
+                spamlevel = 666
 
         elif kick:
             if self.tinybot.active_user.user_level > 3:

@@ -14,6 +14,7 @@ from apis import youtube, other, locals_
 from modules import register, welcome, spam, tokes, voting
 from page import privacy
 from util import tracklist, botdb
+from datetime import timedelta
 
 __version__ = '2.4.5'
 
@@ -51,6 +52,11 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
     kick_pool = []
     ban_pool = []
+
+    black_list = []
+    white_list = []
+    black_time = []
+
     worker_kicks_working = False
     worker_bans_working = False
 
@@ -117,39 +123,39 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
         log.info('user join info: %s' % join_info)
         _user = self.users.add(join_info)
-
-        if _user.nick in self.buddy_db.nick_bans:
-            if pinylib.CONFIG.B_USE_KICK_AS_AUTOBAN:
-                if self.spamcheck.lockdown:
-                    self.process_kick(_user.id)
+        if not self.blacklist_matching(_user):
+            if _user.nick in self.buddy_db.nick_bans:
+                if pinylib.CONFIG.B_USE_KICK_AS_AUTOBAN:
+                    if self.spamcheck.lockdown:
+                        self.process_kick(_user.id)
+                    else:
+                        if pinylib.CONFIG.B_VERBOSE:
+                            self.score = 10
+                            self.handle_msg('\n %s %s kicked, banned nick.' % (self.boticon, _user.nick))
+                        self.send_kick_msg(_user.id)
+                        return
                 else:
+                    if self.spamcheck.lockdown:
+                        self.process_ban(_user.id)
+                    else:
+                        self.send_ban_msg(_user.id)
                     if pinylib.CONFIG.B_VERBOSE:
                         self.score = 10
-                        self.handle_msg('\n %s %s kicked, banned nick.' % (self.boticon, _user.nick))
-                    self.send_kick_msg(_user.id)
+                        self.handle_msg('\n %s %s banned, banned nick.' % (self.boticon, _user.nick))
+                    self.console_write(pinylib.COLOR['red'], '[Security] Banned: Nick %s' % _user.nick)
                     return
+
+            lockdowncheck = self.spamcheck.lockdown_onjoin(_user, time_join)
+
+            if lockdowncheck:
+                self.spamcheck.check_lockdown()
             else:
-                if self.spamcheck.lockdown:
-                    self.process_ban(_user.id)
-                else:
-                    self.send_ban_msg(_user.id)
-                if pinylib.CONFIG.B_VERBOSE:
-                    self.score = 10
-                    self.handle_msg('\n %s %s banned, banned nick.' % (self.boticon, _user.nick))
-                self.console_write(pinylib.COLOR['red'], '[Security] Banned: Nick %s' % _user.nick)
-                return
+                self.usr_registration = register.Registration(self, self.spamcheck, pinylib.CONFIG)
+                is_registered = self.usr_registration.user_register(_user)
 
-        lockdowncheck = self.spamcheck.lockdown_onjoin(_user, time_join)
-
-        if lockdowncheck:
-            self.spamcheck.check_lockdown()
-        else:
-            self.usr_registration = register.Registration(self, self.spamcheck, pinylib.CONFIG)
-            is_registered = self.usr_registration.user_register(_user)
-
-            if is_registered and self.spamcheck.joind_count < 4:
-                usr_welcome = welcome.Welcome(self, pinylib.CONFIG)
-                usr_welcome.welcome(_user.id, self.usr_registration.greet)
+                if is_registered and self.spamcheck.joind_count < 4:
+                    usr_welcome = welcome.Welcome(self, pinylib.CONFIG)
+                    usr_welcome.welcome(_user.id, self.usr_registration.greet)
 
     def on_nick(self, uid, nick):
         """
@@ -804,14 +810,86 @@ class TinychatBot(pinylib.TinychatRTCClient):
         if msg.startswith('!mr uptime'):
             difference = str(datetime.datetime.now() - self.t1)
             self.handle_msg('Current uptime: \n%s' % difference)
+        elif msg.startswith('!reset') and self.active_user.account in ['slicksoul', 'omikes']:
+            self.black_list = []
+            self.white_list = []
+            self.black_time = []
 
         if msg.startswith(prefix):
             self.cmd_handler(msg)
         else:
             self.score = self.spamcheck.check_msg(msg)
-            self.console_write(pinylib.COLOR['white'],
-                               '(' + str(self.score) + ') ' + self.active_user.nick + ': ' + msg)
-            self.active_user.last_msg = msg
+            if self.score == 666:
+                if self.active_user.nick in self.white_list:
+                    self.white_list.pop(self.white_list.index(self.active_user.nick))
+                penalty = datetime.datetime.now() + timedelta(minutes=5)
+                if self.active_user.nick in self.black_list:
+                    self.black_time[self.black_list.index(self.active_user.nick)] = penalty
+                else:
+                    self.black_list.append(self.active_user.nick)
+                    self.black_time.append(penalty)
+                self.whitelist_matching(self.active_user.nick)
+            else:
+                self.console_write(pinylib.COLOR['white'], '(' + str(self.score) + ') ' + self.active_user.nick + ': ' + msg)
+                self.active_user.last_msg = msg
+
+    def whitelist_matching(self, nickname):
+        for userid in self.users.all:
+            user = self.users.all[userid]
+            if user.nick != nickname:
+                if nickname not in self.white_list:
+                    if self.nickmatch(user.nick, nickname):
+                        self.white_list.append(user.nick)
+                        self.console_write(pinylib.COLOR['red'], 'Whitelisted: %s' % user.nick)
+
+    def blacklist_matching(self, person):
+        if person.user_level > 3 and person.nick not in self.white_list:
+            penalty = datetime.datetime.now() + timedelta(minutes=5)
+            if person.nick in self.black_list:
+                bookmark = self.black_list.index(person.nick)
+                if datetime.datetime.now() < self.black_time[bookmark]:
+                    self.black_time[bookmark] = penalty
+                    self.send_ban_msg(person.id)
+                    return True
+            else:
+                for user in self.black_list:
+                    bookmark = self.black_list.index(user)
+                    if self.nickmatch(person.nick, user):
+                        if datetime.datetime.now() < self.black_time[bookmark]:
+                            self.black_time[bookmark] = penalty
+                            self.black_list.append(person.nick)
+                            self.black_time.append(penalty)
+                            self.send_ban_msg(person.id)
+                            return True
+        return False
+
+    def nickmatch(self, nickname, match):
+        parts = self.split_nickname(match)
+        match_type = len(parts)
+
+        if match_type == 1:
+            if parts[0] == nickname:
+                return True
+        else:
+            if nickname.startswith(parts[0]) or nickname.endswith(parts[1]):
+                return True
+            elif match_type == 3 and parts[2] in nickname:
+                return True
+        return False
+
+    def split_nickname(self, nickname):
+        result = []
+        nickname_length = len(nickname)
+        if nickname_length < 6:
+            result.append(nickname)
+        else:
+            middle = int(round(nickname_length / 2))
+            result.append(nickname[0:-middle])
+            result.append(nickname[middle:])
+            if nickname_length > 9:
+                quarter = int(round(nickname_length / 4))
+                result.append(nickname[quarter:-quarter])
+        return result
 
     def private_message_handler(self, private_msg):
         """
