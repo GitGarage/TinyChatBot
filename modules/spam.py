@@ -194,7 +194,7 @@ class Spam:
         if len(msg.splitlines()) > 8:
             spammer = True
             ban = True
-            cleanse = True
+#            cleanse = True
 
         orig_length = len(msg)
         msg = words.removenonascii(msg)
@@ -235,7 +235,7 @@ class Spam:
             if self.tinybot.active_user.user_level > 3:
                 spammer = True
                 ban = True
-                cleanse = True
+#                cleanse = True
 
         for word in chat_words:
             if word in self.general:
@@ -340,7 +340,7 @@ class Spam:
                     all_words = postext.split(' ')
                     while all_words and len(send_part + all_words[0]) + 1 < 500:
                         send_part += all_words.pop(0) + ' '
-                    self.tinybot.handle_msg(send_part)
+#                    self.tinybot.handle_msg(send_part)
                     if all_words:
                         postext = ' '.join(all_words)
                     else:
@@ -363,7 +363,7 @@ class Spam:
                     all_words = postext.split(' ')
                     while all_words and len(send_part + all_words[0]) + 1 < 500:
                         send_part += all_words.pop(0) + ' '
-                    self.tinybot.handle_msg(send_part)
+#                    self.tinybot.handle_msg(send_part)
                     if all_words:
                         postext = ' '.join(all_words)
                     else:
