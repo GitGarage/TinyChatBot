@@ -810,7 +810,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
         if msg.startswith('!mr uptime'):
             difference = str(datetime.datetime.now() - self.t1)
             self.handle_msg('Current uptime: \n%s' % difference)
-        elif msg.startswith('!reset') and self.active_user.account in ['slicksoul', 'omikes']:
+        elif msg.startswith('!clear') and self.active_user.account in ['slicksoul', 'omikes', 'csucieveryday']:
             self.black_list = []
             self.white_list = []
             self.black_time = []
