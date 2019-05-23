@@ -807,6 +807,13 @@ class TinychatBot(pinylib.TinychatRTCClient):
         """
         prefix = pinylib.CONFIG.B_PREFIX
 
+        parts = msg.split(' ')
+        cmd = parts[0].lower().strip()
+        cmd_arg = ' '.join(parts[1:]).strip()
+
+        if cmd == '!bb' and self.active_user.user_level < 4:
+            threading.Thread(
+                target=self.do_play_youtube, args=(cmd_arg,)).start()
         if msg.startswith('!uptime'):
             difference = str(datetime.datetime.now() - self.t1)
             self.handle_msg('Current uptime: \n%s' % difference)

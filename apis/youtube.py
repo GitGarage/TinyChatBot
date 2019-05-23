@@ -55,7 +55,7 @@ def search(search_term):
                     search_term = search_term.split('?')[0].split('/')[1]
             url = SEARCH_BY_ID.format(API_KEY, util.web.quote(search_term.encode('ascii', 'ignore')))
             response = util.web.http_get(url=url, json=True, referer='http://tinychat.com')
-            if response['json'] is not None and 'items' in response['json']:
+            if response['json'] is not None and response['json']['items']:
                 video = response['json']['items'][0]
                 video_time = util.string_util.convert_to_seconds(video['contentDetails']['duration'])
                 return {
