@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5eff5f67-9c20-45bb-b167-b7c04f0236b0" name="Default Changelist" comment="" />
+    <list default="true" id="5eff5f67-9c20-45bb-b167-b7c04f0236b0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tinybot.py" beforeDir="false" afterPath="$PROJECT_DIR$/tinybot.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,8 +30,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+            <state relative-caret-position="399">
+              <caret line="21" column="41" selection-start-line="21" selection-start-column="41" selection-end-line="21" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -45,8 +48,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tinybot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-296">
-              <caret line="927" column="8" selection-start-line="927" selection-start-column="8" selection-end-line="927" selection-end-column="8" />
+            <state relative-caret-position="312">
+              <caret line="822" column="25" selection-start-line="822" selection-start-column="25" selection-end-line="822" selection-end-column="25" />
               <folding>
                 <element signature="e#150#164#0" expanded="true" />
               </folding>
@@ -95,8 +98,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>version</find>
-      <find>check_msg</find>
       <find>black_list</find>
       <find>private_message_handler</find>
       <find>do_play_youtube</find>
@@ -122,9 +123,11 @@
       <find>yt</find>
       <find>threading</find>
       <find>!uptime</find>
-      <find>user_level</find>
       <find>cmd_arg</find>
       <find>do_delete_playlist_item</find>
+      <find>'play'</find>
+      <find>user_level</find>
+      <find>'yt'</find>
     </findStrings>
     <replaceStrings>
       <replace>.nick</replace>
@@ -274,12 +277,12 @@
       <workItem from="1558541539199" duration="20857000" />
       <workItem from="1558563669851" duration="3972000" />
       <workItem from="1558626335527" duration="3928000" />
-      <workItem from="1558630878929" duration="6613000" />
+      <workItem from="1558630878929" duration="6935000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36197000" />
+    <option name="totallyTimeSpent" value="36519000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="954" extended-state="6" />
@@ -330,8 +333,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+        <state relative-caret-position="399">
+          <caret line="21" column="41" selection-start-line="21" selection-start-column="41" selection-end-line="21" selection-end-column="41" />
         </state>
       </provider>
     </entry>
@@ -362,13 +365,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/spam.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="332" column="50" selection-start-line="332" selection-start-column="40" selection-end-line="332" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/apis/youtube.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
@@ -383,10 +379,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/modules/spam.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="332" column="50" selection-start-line="332" selection-start-column="40" selection-end-line="332" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tinybot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-296">
-          <caret line="927" column="8" selection-start-line="927" selection-start-column="8" selection-end-line="927" selection-end-column="8" />
+        <state relative-caret-position="312">
+          <caret line="822" column="25" selection-start-line="822" selection-start-column="25" selection-end-line="822" selection-end-column="25" />
           <folding>
             <element signature="e#150#164#0" expanded="true" />
           </folding>
