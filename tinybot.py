@@ -817,13 +817,13 @@ class TinychatBot(pinylib.TinychatRTCClient):
         if self.active_user.user_level < 4:
             if cmd == 'yt':
                 threading.Thread(target=self.do_play_youtube, args=(cmd_arg,)).start()
-            elif cmd == 'bbskip':
+            elif cmd == '!skip':
                 self.do_skip()
-            elif cmd == 'bbdel':
+            elif cmd == '!del':
                 self.do_delete_playlist_item(cmd_arg)
-            elif cmd == 'bbreset':
+            elif cmd == '!reset':
                 self.do_clear_playlist()
-            elif cmd == 'bbstop':
+            elif cmd == '!stop':
                 self.do_close_media()
         if msg.startswith('!uptime'):
             difference = str(datetime.datetime.now() - self.t1)
