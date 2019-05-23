@@ -47,7 +47,6 @@ def search(search_term):
                 search_term = search_term.split('&')[0].split('?v=')[1]
             else:
                 search_term = search_term.split('?')[0].split('/')[1]
-            debug = search_term
             url = SEARCH_BY_ID.format(API_KEY, util.web.quote(search_term.encode('ascii', 'ignore')))
             response = util.web.http_get(url=url, json=True, referer='http://tinychat.com')
             if response['json'] is not None and response['json']['items']:
