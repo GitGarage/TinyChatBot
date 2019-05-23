@@ -42,10 +42,12 @@ def search(search_term):
     """
     if search_term:
         if 'youtube.com' in search_term or 'youtu.be' in search_term:
+            search_term = search_term.split('//')[1] if '//' in search_term else search_term
             if "?v=" in search_term:
                 search_term = search_term.split('&')[0].split('?v=')[1]
             else:
                 search_term = search_term.split('?')[0].split('/')[1]
+            debug = search_term
             url = SEARCH_BY_ID.format(API_KEY, util.web.quote(search_term.encode('ascii', 'ignore')))
             response = util.web.http_get(url=url, json=True, referer='http://tinychat.com')
             if response['json'] is not None and response['json']['items']:
@@ -56,8 +58,7 @@ def search(search_term):
                     'video_id': video['id'],
                     'video_time': video_time,
                     'video_title': video['snippet']['title'],
-                    'image': video['snippet']['thumbnails']['medium']['url'],
-                    'debug': 1
+                    'image': video['snippet']['thumbnails']['medium']['url']
                 }
 
         if 'list' in search_term:

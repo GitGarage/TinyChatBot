@@ -938,7 +938,6 @@ class TinychatBot(pinylib.TinychatRTCClient):
                 self.send_chat_msg('Please specify youtube title, id or link.')
             else:
                 _youtube = youtube.search(search_str)
-                self.console_write(pinylib.COLOR['white'], '%s' % str(_youtube))
                 if _youtube is None:
                     log.warning('youtube request returned: %s' % _youtube)
                     self.send_chat_msg('Could not find video: ' + search_str)
