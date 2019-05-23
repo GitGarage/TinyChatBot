@@ -15,6 +15,7 @@ from modules import register, welcome, spam, tokes, voting
 from page import privacy
 from util import tracklist, botdb
 from datetime import timedelta
+from langdetect import detect_langs
 
 __version__ = '2.4.5'
 
@@ -1184,8 +1185,10 @@ class TinychatBot(pinylib.TinychatRTCClient):
         if self.playlist.has_active_track:
             self.cancel_timer()
 
+        _youtube = youtube.video_details(yt_data['item']['id'], False)
+
         if yt_data['item']['offset'] == 0:
-            _youtube = youtube.video_details(yt_data['item']['id'], False)
+
             self.playlist.start(user_nick, _youtube)
             self.timer(self.playlist.track.time)
             self.console_write(pinylib.COLOR['bright_magenta'], '[Media] %s started youtube video (%s)' %
@@ -1201,6 +1204,11 @@ class TinychatBot(pinylib.TinychatRTCClient):
                 self.timer(offset)
                 self.console_write(pinylib.COLOR['bright_magenta'], '[Media] %s searched the youtube video to: %s' %
                                    (user_nick, int(round(yt_data['item']['offset']))))
+
+        langs = detect_langs(_youtube['video_title'])
+        for language in langs:
+            if language.lang == "de" and language.prob > .25:
+                self.do_close_media()
 
     def on_yut_pause(self, yt_data):
         """
