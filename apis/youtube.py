@@ -43,16 +43,10 @@ def search(search_term):
     if search_term:
         response = {'json': None}
         if 'youtube.com' in search_term or 'youtu.be' in search_term:
-            if "youtube.com" in search_term:
-                if "?v=" in search_term:
-                    search_term = search_term.split('&')[0].split('?v=')[1]
-                else:
-                    search_term = search_term.split('?')[0].split('/')[1]
-            elif "youtu.be" in search_term:
-                if "?v=" in search_term:
-                    search_term = search_term.split('&')[0].split('?v=')[1]
-                else:
-                    search_term = search_term.split('?')[0].split('/')[1]
+            if "?v=" in search_term:
+                search_term = search_term.split('&')[0].split('?v=')[1]
+            else:
+                search_term = search_term.split('?')[0].split('/')[1]
             url = SEARCH_BY_ID.format(API_KEY, util.web.quote(search_term.encode('ascii', 'ignore')))
             response = util.web.http_get(url=url, json=True, referer='http://tinychat.com')
             if response['json'] is not None and response['json']['items']:
