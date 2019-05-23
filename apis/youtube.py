@@ -78,10 +78,7 @@ def search(search_term):
                     for item in response['json']['items']:
                         video_id = item['id']['videoId']
                         details = video_details(video_id)
-                        print(str(video_id))
                         if details is not None:
-                            print(str(details['video_time']))
-                            print(str(details['video_title']))
                             return {
                                 'type': 'youTube',
                                 'video_id': video_id,
