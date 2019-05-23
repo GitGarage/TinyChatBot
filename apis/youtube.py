@@ -41,7 +41,6 @@ def search(search_term):
     :return: dict{'type=youtube', 'video_id', 'int(video_time)', 'video_title'} or None on error.
     """
     if search_term:
-        response = {'json': None}
         if 'youtube.com' in search_term or 'youtu.be' in search_term:
             if "?v=" in search_term:
                 search_term = search_term.split('&')[0].split('?v=')[1]
@@ -60,11 +59,10 @@ def search(search_term):
                     'image': video['snippet']['thumbnails']['medium']['url']
                 }
 
-        if response['json'] is None:
-            if 'list' in search_term:
-                search_term = search_term.split('?list')[0]
-            url = SEARCH_URL.format(API_KEY, util.web.quote(search_term.encode('ascii', 'ignore')))
-            response = util.web.http_get(url=url, json=True, referer='http://tinychat.com')
+        if 'list' in search_term:
+            search_term = search_term.split('?list')[0]
+        url = SEARCH_URL.format(API_KEY, util.web.quote(search_term.encode('ascii', 'ignore')))
+        response = util.web.http_get(url=url, json=True, referer='http://tinychat.com')
 
         if response['json'] is not None:
             try:
