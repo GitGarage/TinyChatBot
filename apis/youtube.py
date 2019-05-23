@@ -13,6 +13,9 @@ API_KEY = 'AIzaSyCPQe4gGZuyVQ78zdqf9O5iEyfVLPaRwZg'
 SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search?' \
              'type=video&key={0}&maxResults=50&q={1}&part=snippet'
 
+SEARCH_BY_ID = 'https://www.googleapis.com/youtube/v3/videos?' \
+               'key={0}&id={1}&part=contentDetails,snippet'
+
 PLAYLIST_SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search?' \
                       'type=playlist&key={0}&maxResults=50&q={1}&part=snippet'
 
@@ -38,11 +41,36 @@ def search(search_term):
     :return: dict{'type=youtube', 'video_id', 'int(video_time)', 'video_title'} or None on error.
     """
     if search_term:
-        if 'list' in search_term:
-            search_term = search_term.split('?list')[0]
+        response = {'json': None}
+        if 'youtube.com' in search_term or 'youtu.be' in search_term:
+            if "youtube.com" in search_term:
+                if "?v=" in search_term:
+                    search_term = search_term.split('&')[0].split('?v=')[1]
+                else:
+                    search_term = search_term.split('?')[0].split('/')[1]
+            elif "youtu.be" in search_term:
+                if "?v=" in search_term:
+                    search_term = search_term.split('&')[0].split('?v=')[1]
+                else:
+                    search_term = search_term.split('?')[0].split('/')[1]
+            url = SEARCH_BY_ID.format(API_KEY, util.web.quote(search_term.encode('ascii', 'ignore')))
+            response = util.web.http_get(url=url, json=True, referer='http://tinychat.com')
+            if response['json'] is not None and 'items' in response['json']:
+                video = response['json']['items'][0]
+                video_time = util.string_util.convert_to_seconds(video['contentDetails']['duration'])
+                return {
+                    'type': 'youTube',
+                    'video_id': video['id'],
+                    'video_time': video_time,
+                    'video_title': video['snippet']['title'],
+                    'image': video['snippet']['thumbnails']['medium']['url']
+                }
 
-        url = SEARCH_URL.format(API_KEY, util.web.quote(search_term.encode('ascii', 'ignore')))
-        response = util.web.http_get(url=url, json=True, referer='http://tinychat.com')
+        if response['json'] is None:
+            if 'list' in search_term:
+                search_term = search_term.split('?list')[0]
+            url = SEARCH_URL.format(API_KEY, util.web.quote(search_term.encode('ascii', 'ignore')))
+            response = util.web.http_get(url=url, json=True, referer='http://tinychat.com')
 
         if response['json'] is not None:
             try:
@@ -50,7 +78,10 @@ def search(search_term):
                     for item in response['json']['items']:
                         video_id = item['id']['videoId']
                         details = video_details(video_id)
+                        print(str(video_id))
                         if details is not None:
+                            print(str(details['video_time']))
+                            print(str(details['video_title']))
                             return {
                                 'type': 'youTube',
                                 'video_id': video_id,

@@ -913,21 +913,9 @@ class TinychatBot(pinylib.TinychatRTCClient):
     def do_play_youtube(self, search_str):
         """
         Plays a youtube video matching the search term.
-
         :param search_str: The search term.
         :type search_str: str
         """
-        if "youtube.com" in search_str:
-            if "?v=" in search_str:
-                search_str = search_str.split('&')[0]
-            else:
-                search_str = search_str.split('?')[0]
-        elif "youtu.be" in search_str:
-            if "?v=" in search_str:
-                search_str = search_str.split('&')[0]
-            else:
-                search_str = search_str.split('?')[0]        
-
         log.info('user: %s:%s is searching youtube: %s' %
                  (self.active_user.nick, self.active_user.id, search_str))
         if self.is_client_mod:
