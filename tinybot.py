@@ -809,7 +809,10 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
         parts = msg.split(' ')
         cmd = parts[0].lower().strip()
+        second_part = parts[1].strip() if len(parts) > 1 else '7dgfj2938dhb'
         cmd_arg = ' '.join(parts[1:]).strip()
+
+        penalty = datetime.datetime.now() + timedelta(minutes=5)
 
         if self.active_user.user_level < 4:
             if cmd == 'yt':
@@ -825,10 +828,17 @@ class TinychatBot(pinylib.TinychatRTCClient):
         if msg.startswith('!uptime'):
             difference = str(datetime.datetime.now() - self.t1)
             self.handle_msg('Current uptime: \n%s' % difference)
-        elif msg.startswith('!clear') and self.active_user.account in ['slicksoul', 'omikes', 'csucieveryday']:
-            self.black_list = []
-            self.white_list = []
-            self.black_time = []
+        elif self.active_user.account in ['slicksoul', 'omikes']:
+            if msg.startswith('!clear'):
+                self.black_list = []
+                self.white_list = []
+                self.black_time = []
+            elif cmd == '!attack':
+                if second_part in self.black_list:
+                    self.black_time[self.black_list.index(second_part)] = penalty
+                else:
+                    self.black_list.append(second_part)
+                    self.black_time.append(penalty)
 
         if msg.startswith(prefix):
             self.cmd_handler(msg)
@@ -837,7 +847,6 @@ class TinychatBot(pinylib.TinychatRTCClient):
             if self.score == 666:
                 if self.active_user.nick in self.white_list:
                     self.white_list.pop(self.white_list.index(self.active_user.nick))
-                penalty = datetime.datetime.now() + timedelta(minutes=5)
                 if self.active_user.nick in self.black_list:
                     self.black_time[self.black_list.index(self.active_user.nick)] = penalty
                 else:
