@@ -1185,10 +1185,8 @@ class TinychatBot(pinylib.TinychatRTCClient):
         if self.playlist.has_active_track:
             self.cancel_timer()
 
-        _youtube = youtube.video_details(yt_data['item']['id'], False)
-
         if yt_data['item']['offset'] == 0:
-
+            _youtube = youtube.video_details(yt_data['item']['id'], False)
             self.playlist.start(user_nick, _youtube)
             self.timer(self.playlist.track.time)
             self.console_write(pinylib.COLOR['bright_magenta'], '[Media] %s started youtube video (%s)' %
@@ -1205,7 +1203,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
                 self.console_write(pinylib.COLOR['bright_magenta'], '[Media] %s searched the youtube video to: %s' %
                                    (user_nick, int(round(yt_data['item']['offset']))))
 
-        langs = detect_langs(_youtube['video_title'])
+        langs = detect_langs(yt_data['snippet']['title'])
         for language in langs:
             if language.lang == "de" and language.prob > .5:
                 print(str(language.prob))
