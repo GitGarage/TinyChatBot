@@ -1210,9 +1210,11 @@ class TinychatBot(pinylib.TinychatRTCClient):
                 not_english += language.prob
             if language.lang == 'de':
                 german += language.prob
-        print(str(german / not_english))
-        if not_english > 0 and (german / not_english) > .25:
-            self.do_skip()
+
+        if not_english > 0:
+            print(str(german / not_english))
+            if (german / not_english) > .25:
+                self.do_skip()
 
     def on_yut_pause(self, yt_data):
         """
