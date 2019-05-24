@@ -1207,8 +1207,10 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
         langs = detect_langs(_youtube['video_title'])
         for language in langs:
-            if language.lang == "de" and language.prob > .25:
-                self.do_close_media()
+            if language.lang == "de" and language.prob > .75:
+                print(str(language.prob))
+                self.do_skip()
+
 
     def on_yut_pause(self, yt_data):
         """
@@ -1308,9 +1310,10 @@ class TinychatBot(pinylib.TinychatRTCClient):
         """ Skip to the next item in the playlist. """
         if self.is_client_mod:
             if self.playlist.is_last_track is None:
-                self.send_chat_msg('No tunes to skip. The playlist is empty.')
+                hello = 0 #self.do_close_media()
             elif self.playlist.is_last_track:
-                self.send_chat_msg('This is the last track in the playlist.')
+                self.cancel_timer()
+                self.do_close_media()
             else:
                 self.cancel_timer()
                 next_track = self.playlist.next_track
@@ -1328,7 +1331,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
         """
         if self.is_client_mod:
             if len(self.playlist.track_list) == 0:
-                self.send_chat_msg('The playlist is empty.')
+                self.do_close_media()
             elif len(to_delete) == 0:
                 self.send_chat_msg('No indexes provided.')
             else:

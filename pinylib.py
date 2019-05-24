@@ -750,7 +750,7 @@ class TinychatRTCClient(object):
             'req': self._req,
             'text': msg
         }
-        self.send(payload)
+        #self.send(payload)
 
     def send_private_msg(self, uid, msg):
         """
