@@ -1216,8 +1216,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
                 german += language.prob
 
         if not_english > 0 or ('erman' in letters and 'arch' in letters):
-            print(str(german / not_english))
-            if (german / not_english) > .5:
+            if ('erman' in letters and 'arch' in letters) or (german / not_english) > .5:
                 self.do_skip()
 
     def on_yut_pause(self, yt_data):
