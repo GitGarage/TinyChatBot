@@ -16,7 +16,7 @@ from modules import register, welcome, spam, tokes, voting
 from page import privacy
 from util import tracklist, botdb
 from datetime import timedelta
-from langdetect import detect_langs
+from langdetect import detect
 
 __version__ = '2.4.5'
 
@@ -1206,18 +1206,17 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
         regex = re.compile('[^a-zA-Z]')
         letters = regex.sub('', yt_data['item']['title'])
-        langs = detect_langs(letters)
-        not_english = 0
-        german = 0
-        for language in langs:
-            if language.lang != 'en':
-                not_english += language.prob
-            if language.lang == 'de':
-                german += language.prob
+        lang = detect(letters)
+#        not_english = 0
+#        german = 0
+#        for language in langs:
+#            if language.lang != 'en':
+#                not_english += language.prob
+#            if language.lang == 'de':
+#                german += language.prob
 
-#        if not_english > 0 or ('erman' in letters and 'arch' in letters):
-#            if ('erman' in letters and 'arch' in letters) or (german / not_english) > .5:
-#                self.do_skip()
+        if lang == 'de' or ('erman' in letters and 'arch' in letters):
+            self.do_skip()
 #        if not_english > 0 or ('erman' in letters and 'arch' in letters):
 #            if ('erman' in letters and 'arch' in letters) or (german / not_english) > .5:
 #                self.do_skip()
