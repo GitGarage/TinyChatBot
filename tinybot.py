@@ -1203,9 +1203,16 @@ class TinychatBot(pinylib.TinychatRTCClient):
                 self.console_write(pinylib.COLOR['bright_magenta'], '[Media] %s searched the youtube video to: %s' %
                                    (user_nick, int(round(yt_data['item']['offset']))))
         langs = detect_langs(yt_data['item']['title'])
+        not_english = 0
+        german = 0
         for language in langs:
-            if language.lang == 'de' and language.prob > .5:
-                self.do_skip()
+            if language.lang != 'en':
+                not_english += language.prob
+            if language.lang == 'de':
+                german += language.prob
+        print(str(german / not_english))
+        if not_english > 0 and (german / not_english) > .25:
+            self.do_skip()
 
     def on_yut_pause(self, yt_data):
         """
