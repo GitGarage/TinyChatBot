@@ -1209,7 +1209,6 @@ class TinychatBot(pinylib.TinychatRTCClient):
         for language in langs:
             if language.lang == "de" and language.prob > .5:
                 print(str(language.prob))
-                sleep(1)
                 self.do_skip()
 
 
@@ -1310,11 +1309,12 @@ class TinychatBot(pinylib.TinychatRTCClient):
     def do_skip(self):
         """ Skip to the next item in the playlist. """
         if self.is_client_mod:
-            if self.playlist.is_last_track is None:
+            if len(self.playlist.track_list) == 0:
+                self.do_close_media()
+            elif self.playlist.is_last_track is None:
                 hello = 0 #self.do_close_media()
             elif self.playlist.is_last_track:
-                self.cancel_timer()
-                self.do_close_media()
+                hello = 0
             else:
                 self.cancel_timer()
                 next_track = self.playlist.next_track
