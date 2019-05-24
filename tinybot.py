@@ -1209,6 +1209,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
         for language in langs:
             if language.lang == "de" and language.prob > .5:
                 print(str(language.prob))
+                sleep(1)
                 self.do_skip()
 
 
