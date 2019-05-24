@@ -1207,7 +1207,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
         langs = detect_langs(_youtube['video_title'])
         for language in langs:
-            if language.lang == "de" and language.prob > .25:
+            if language.lang == "de" and language.prob > .5:
                 print(str(language.prob))
                 self.do_skip()
 
