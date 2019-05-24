@@ -8,6 +8,7 @@ import logging
 import threading
 import datetime
 import time
+import re
 
 import pinylib
 from apis import youtube, other, locals_
@@ -1202,7 +1203,10 @@ class TinychatBot(pinylib.TinychatRTCClient):
                 self.timer(offset)
                 self.console_write(pinylib.COLOR['bright_magenta'], '[Media] %s searched the youtube video to: %s' %
                                    (user_nick, int(round(yt_data['item']['offset']))))
-        langs = detect_langs(yt_data['item']['title'])
+
+        regex = re.compile('[^a-zA-Z]')
+        letters = regex.sub('', yt_data['item']['title'])
+        langs = detect_langs(letters)
         not_english = 0
         german = 0
         for language in langs:
@@ -1213,7 +1217,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
         if not_english > 0:
             print(str(german / not_english))
-            if (german / not_english) > .25:
+            if (german / not_english) > .5:
                 self.do_skip()
 
     def on_yut_pause(self, yt_data):
