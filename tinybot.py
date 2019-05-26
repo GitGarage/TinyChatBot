@@ -16,7 +16,7 @@ from modules import register, welcome, spam, tokes, voting
 from page import privacy
 from util import tracklist, botdb
 from datetime import timedelta
-from langdetect import detect
+#from langdetect import detect
 
 __version__ = '2.4.5'
 
@@ -58,6 +58,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
     black_list = []
     white_list = []
     black_time = []
+    bantastic = datetime.datetime.now()
 
     worker_kicks_working = False
     worker_bans_working = False
@@ -125,7 +126,9 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
         log.info('user join info: %s' % join_info)
         _user = self.users.add(join_info)
-        if not self.blacklist_matching(_user):
+        if self.bantastic < datetime.datetime.now() and _user.user_level > 3:
+            self.process_ban(_user.id)
+        elif not self.blacklist_matching(_user):
             if _user.nick in self.buddy_db.nick_bans:
                 if pinylib.CONFIG.B_USE_KICK_AS_AUTOBAN:
                     if self.spamcheck.lockdown:
@@ -814,18 +817,20 @@ class TinychatBot(pinylib.TinychatRTCClient):
         second_part = parts[1].strip() if len(parts) > 1 else '7dgfj2938dhb'
         cmd_arg = ' '.join(parts[1:]).strip()
 
-        penalty = datetime.datetime.now() + timedelta(minutes=5)
+        penalty = datetime.datetime.now() + timedelta(minutes=30)
 
         if self.active_user.user_level < 4:
-            if cmd == 'yt':
+            if cmd == '!yt':
                 threading.Thread(target=self.do_play_youtube, args=(cmd_arg,)).start()
-            elif cmd == 'mskip':
+            elif cmd == 'yt':
+                threading.Thread(target=self.do_play_youtube, args=(cmd_arg,)).start()
+            elif cmd == '!skip':
                 self.do_skip()
-            elif cmd == 'mdel':
+            elif cmd == '!del':
                 self.do_delete_playlist_item(cmd_arg)
-            elif cmd == 'mreset':
+            elif cmd == '!reset':
                 self.do_clear_playlist()
-            elif cmd == 'mstop':
+            elif cmd == '!stop':
                 self.do_close_media()
         if msg.startswith('!uptime'):
             difference = str(datetime.datetime.now() - self.t1)
@@ -851,9 +856,17 @@ class TinychatBot(pinylib.TinychatRTCClient):
                     self.white_list.pop(self.white_list.index(self.active_user.nick))
                 if self.active_user.nick in self.black_list:
                     self.black_time[self.black_list.index(self.active_user.nick)] = penalty
+                    banrate += 1
+                    if banrate > 2:
+                        banrate = 0
+                        self.bantastic = datetime.datetime.now() + timedelta(minutes=60)
                 else:
                     self.black_list.append(self.active_user.nick)
                     self.black_time.append(penalty)
+                    banrate += 1
+                    if banrate > 2:
+                        banrate = 0
+                        self.bantastic = datetime.datetime.now() + timedelta(minutes=60)
                 self.whitelist_matching(self.active_user.nick)
             else:
                 self.console_write(pinylib.COLOR['white'], '(' + str(self.score) + ') ' + self.active_user.nick + ': ' + msg)
@@ -870,7 +883,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
     def blacklist_matching(self, person):
         if person.user_level > 3 and person.nick not in self.white_list:
-            penalty = datetime.datetime.now() + timedelta(minutes=5)
+            penalty = datetime.datetime.now() + timedelta(minutes=30)
             if person.nick in self.black_list:
                 bookmark = self.black_list.index(person.nick)
                 if datetime.datetime.now() < self.black_time[bookmark]:
@@ -1204,9 +1217,9 @@ class TinychatBot(pinylib.TinychatRTCClient):
                 self.console_write(pinylib.COLOR['bright_magenta'], '[Media] %s searched the youtube video to: %s' %
                                    (user_nick, int(round(yt_data['item']['offset']))))
 
-        regex = re.compile('[^a-zA-Z]')
-        letters = regex.sub('', yt_data['item']['title'])
-        lang = detect(letters)
+#        regex = re.compile('[^a-zA-Z]')
+#        letters = regex.sub('', yt_data['item']['title'])
+#        lang = detect(letters)
 #        not_english = 0
 #        german = 0
 #        for language in langs:
@@ -1215,8 +1228,8 @@ class TinychatBot(pinylib.TinychatRTCClient):
 #            if language.lang == 'de':
 #                german += language.prob
 
-        if lang == 'de' or ('erman' in letters and 'arch' in letters):
-            self.do_skip()
+#        if lang == 'de' or ('erman' in letters and 'arch' in letters):
+#            self.do_skip()
 #        if not_english > 0 or ('erman' in letters and 'arch' in letters):
 #            if ('erman' in letters and 'arch' in letters) or (german / not_english) > .5:
 #                self.do_skip()
