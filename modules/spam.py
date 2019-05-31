@@ -226,7 +226,7 @@ class Spam:
                     else:
                         first_time = self.recent_times[this_message]
                         break
-            if (msg_time - first_time) < 3:
+            if (msg_time - first_time) < 7:
                 spammer = True
                 ban = True
 

@@ -58,6 +58,8 @@ class TinychatBot(pinylib.TinychatRTCClient):
     black_list = []
     white_list = []
     black_time = []
+    fuckyoubot = False
+    banrate = 0
     bantastic = datetime.datetime.now()
 
     worker_kicks_working = False
@@ -126,7 +128,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
         log.info('user join info: %s' % join_info)
         _user = self.users.add(join_info)
-        if self.bantastic < datetime.datetime.now() and _user.user_level > 3:
+        if not self.fuckyoubot and self.bantastic > datetime.datetime.now() and _user.user_level > 3:
             self.process_ban(_user.id)
         elif not self.blacklist_matching(_user):
             if _user.nick in self.buddy_db.nick_bans:
@@ -819,33 +821,45 @@ class TinychatBot(pinylib.TinychatRTCClient):
 
         penalty = datetime.datetime.now() + timedelta(minutes=30)
 
-        if self.active_user.user_level < 4:
-            if cmd == '!yt':
+        if self.active_user.user_level < 6:
+            if cmd == 'yt':
                 threading.Thread(target=self.do_play_youtube, args=(cmd_arg,)).start()
-            elif cmd == 'yt':
-                threading.Thread(target=self.do_play_youtube, args=(cmd_arg,)).start()
-            elif cmd == '!skip':
+            elif msg == 'skip':
                 self.do_skip()
-            elif cmd == '!del':
+            elif cmd == 'del':
                 self.do_delete_playlist_item(cmd_arg)
-            elif cmd == '!reset':
+            elif msg == 'reset':
                 self.do_clear_playlist()
-            elif cmd == '!stop':
+            elif msg == 'stop':
                 self.do_close_media()
-        if msg.startswith('!uptime'):
+        if msg == '!uptime':
             difference = str(datetime.datetime.now() - self.t1)
             self.handle_msg('Current uptime: \n%s' % difference)
-        elif self.active_user.account in ['slicksoul', 'omikes']:
-            if msg.startswith('!clear'):
+        elif self.active_user.user_level < 4:
+            if msg == '!clear':
                 self.black_list = []
                 self.white_list = []
                 self.black_time = []
+                self.bantastic = datetime.datetime.now()
+                self.banrate = 0
             elif cmd == '!attack':
                 if second_part in self.black_list:
                     self.black_time[self.black_list.index(second_part)] = penalty
                 else:
                     self.black_list.append(second_part)
                     self.black_time.append(penalty)
+            elif cmd == '!wl':
+                if second_part in self.black_list:
+                    bindex = self.black_list.index(second_part)
+                    self.black_list.pop(bindex)
+                    self.black_time.pop(bindex)
+                self.white_list.append(second_part)
+            elif msg == '!bantastic':
+                if self.bantastic < datetime.datetime.now():
+                    self.bantastic = datetime.datetime.now()
+                self.bantastic += timedelta(minutes=5)
+            elif msg == '!fuckyoubot':
+                self.fuckyoubot = not self.fuckyoubot
 
         if msg.startswith(prefix):
             self.cmd_handler(msg)
@@ -856,17 +870,17 @@ class TinychatBot(pinylib.TinychatRTCClient):
                     self.white_list.pop(self.white_list.index(self.active_user.nick))
                 if self.active_user.nick in self.black_list:
                     self.black_time[self.black_list.index(self.active_user.nick)] = penalty
-                    banrate += 1
-                    if banrate > 2:
-                        banrate = 0
-                        self.bantastic = datetime.datetime.now() + timedelta(minutes=60)
+                    self.banrate += 1
+                    if self.banrate > 2 and self.bantastic < datetime.datetime.now():
+                        self.banrate = 0
+                        self.bantastic = datetime.datetime.now() + timedelta(minutes=5)
                 else:
                     self.black_list.append(self.active_user.nick)
                     self.black_time.append(penalty)
-                    banrate += 1
-                    if banrate > 2:
+                    self.banrate += 1
+                    if self.banrate > 2 and self.bantastic < datetime.datetime.now():
                         banrate = 0
-                        self.bantastic = datetime.datetime.now() + timedelta(minutes=60)
+                        self.bantastic = datetime.datetime.now() + timedelta(minutes=5)
                 self.whitelist_matching(self.active_user.nick)
             else:
                 self.console_write(pinylib.COLOR['white'], '(' + str(self.score) + ') ' + self.active_user.nick + ': ' + msg)
