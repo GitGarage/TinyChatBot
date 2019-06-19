@@ -5,6 +5,7 @@ __pycache__/
 config.py
 .idea
 .idea/*
+*.pem
 
 # C extensions
 *.so

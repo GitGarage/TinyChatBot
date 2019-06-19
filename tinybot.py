@@ -58,7 +58,7 @@ class TinychatBot(pinylib.TinychatRTCClient):
     black_list = []
     white_list = []
     black_time = []
-    fuckyoubot = False
+    fuckyoubot = True
     banrate = 0
     bantastic = datetime.datetime.now()
 
